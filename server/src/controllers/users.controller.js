@@ -6,13 +6,18 @@ const User = require('../models/users.model.js');
 
 router.get('', async (req, res) => {
     try {
-        const page = req.query.page || 1;
-        const size = req.query.size || 10;
+        let { page, size } = req.query
+        if (!page) {
+            page = 1;
+        }
+        if (!size) {
+            size = 10;
+        }
 
-        const totalPages = Math.ceil((await User.find().countDocuments()) / size);
+        let totalPages = Math.ceil((await User.find().countDocuments()) / size);
 
         const users = await User.find().skip((page - 1) * size).limit(size).lean().exec();
-        return res.send(users);
+        return res.send({ page, size, data: users });
     } catch (err) {
         return res.status(500).send(err.message);
     }
@@ -47,7 +52,8 @@ router.post('', async (req, res) => {
 
 router.patch('/:id', async (req, res) => {
     try {
-        const users = await User.findByIdAndUpdate(req.params.id, req.body);
+        console.log("PARAMS:::", req.params);
+        const users = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         return res.status(201).send(users);
     } catch (err) {
         return res.send(err.message);
