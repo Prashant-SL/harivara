@@ -52,7 +52,6 @@ router.post('', async (req, res) => {
 
 router.patch('/:id', async (req, res) => {
     try {
-        console.log("PARAMS:::", req.params);
         const users = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         return res.status(201).send(users);
     } catch (err) {
