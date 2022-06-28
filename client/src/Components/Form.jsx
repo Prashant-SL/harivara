@@ -3,11 +3,10 @@ import React, { useState, useEffect } from "react";
 import "./Form.css"
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+
 
 const Form = (props) => {
-    var result = useSelector((state) => state.cartReducer.list);
-    let dispatch = useDispatch();
+
     const { id } = useParams();
     const navigate = useNavigate();
 

@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import "./Users.css";
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import { useDispatch, useSelector } from 'react-redux';
+import setUsers from "../Redux/actions/cartActions";
 
 const Users = () => {
+
+    let dispatch = useDispatch();
     const [data, setData] = useState([]);
-    // const [users, setUsers] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(10);
-    // setUsers(data)
     let response;
 
     const fetchData = async () => {
         response = await axios.get(`http://localhost:8080/users?page=${page}`);
         setData(response.data.data);
-        // setPage(Number(response.data.page));
-        // setSize(Number(response.data.size));
+        dispatch(setUsers(response.data.data))
     }
 
     useEffect(() => {
@@ -30,6 +30,7 @@ const Users = () => {
         });
         response = await axios.get(`http://localhost:8080/users?page=${page}`);
         setData(response.data.data);
+        dispatch(setUsers(response.data.data));
     }
 
     const handlenext = async () => {
@@ -39,8 +40,10 @@ const Users = () => {
         });
         response = await axios.get(`http://localhost:8080/users?page=${page}`);
         setData(response.data.data);
-        dispatch(setCart(response.data.data));
+        dispatch(setUsers(response.data.data));
     }
+
+    var result = useSelector((state) => state.cartReducer.list);
 
     return (
         <div style={{ display: "grid", gap: "15px", alignContent: "start", justifyContent: "center" }}>
@@ -56,16 +59,18 @@ const Users = () => {
                 </thead>
                 <tbody>
                     {
-                        data.map((e) => {
+                        result.map((e) => {
                             return (
                                 <tr key={e.id}>
                                     <td>{e.id}</td>
                                     <td>{e.name}</td>
                                     <td>{e.email}</td>
                                     <td>{e.date}</td>
-                                    <Link to={`/users/${e._id}`}>
-                                        <button class="button-2" role="button">Edit</button>
-                                    </Link>
+                                    <td>
+                                        <Link to={`/users/${e._id}`}>
+                                            <button className="button-2" role="button">Edit</button>
+                                        </Link>
+                                    </td>
                                 </tr>
                             )
                         })
@@ -77,7 +82,7 @@ const Users = () => {
                 <button disabled={page === 1} onClick={handlePrev}>Prev</button>
                 <button disabled={page === pageCount} onClick={handlenext}>Next</button>
             </div>
-        </div>
+        </div >
     )
 }
 export default Users;
