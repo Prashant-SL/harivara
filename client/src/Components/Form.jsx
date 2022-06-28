@@ -3,13 +3,15 @@ import React, { useState, useEffect } from "react";
 import "./Form.css"
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Form = (props) => {
+    var result = useSelector((state) => state.cartReducer.list);
+    let dispatch = useDispatch();
     const { id } = useParams();
     const navigate = useNavigate();
 
     const [data, setData] = useState({
-        date: "",
         email: "",
         id: "",
         name: "",
@@ -43,14 +45,9 @@ const Form = (props) => {
                             <label>Email</label>
                         </div>
                     </div>
-                    <div className="col-md-6 col-sm-12">
-                        <div className="styled-input" style={{ float: "right" }}>
-                            <input onChange={handleChange} required type="date" />
-                        </div>
-                    </div>
 
                     <div className="col-xs-12">
-                        <button onClick={submitData} className="btn-lrg submit-btn">Update</button>
+                        <button onClick={submitData} style={{ marginTop: "6rem", border: "1px solid transparent" }} className="btn-lrg submit-btn">Update</button>
                     </div>
                 </div>
             </form>

@@ -14,8 +14,6 @@ router.get('', async (req, res) => {
             size = 10;
         }
 
-        let totalPages = Math.ceil((await User.find().countDocuments()) / size);
-
         const users = await User.find().skip((page - 1) * size).limit(size).lean().exec();
         return res.send({ page, size, data: users });
     } catch (err) {
@@ -59,13 +57,5 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
-    try {
-        const users = await User.findById(req.params.id).lean().exec();
-        return res.send(users);
-    } catch (err) {
-        return res.status(500).send(err.message);
-    }
-});
 
 module.exports = router;

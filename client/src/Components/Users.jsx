@@ -19,10 +19,6 @@ const Users = () => {
         // setSize(Number(response.data.size));
     }
 
-    const updateData = (id) => {
-        console.log("ID is:", id);
-    }
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -43,6 +39,7 @@ const Users = () => {
         });
         response = await axios.get(`http://localhost:8080/users?page=${page}`);
         setData(response.data.data);
+        dispatch(setCart(response.data.data));
     }
 
     return (
@@ -64,12 +61,10 @@ const Users = () => {
                                 <tr key={e.id}>
                                     <td>{e.id}</td>
                                     <td>{e.name}</td>
-                                    <td>{e.name}</td>
                                     <td>{e.email}</td>
+                                    <td>{e.date}</td>
                                     <Link to={`/users/${e._id}`}>
-                                        <button onClick={() => {
-                                            updateData(e._id)
-                                        }} class="button-2" role="button">Edit</button>
+                                        <button class="button-2" role="button">Edit</button>
                                     </Link>
                                 </tr>
                             )
